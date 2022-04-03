@@ -43,11 +43,10 @@ def to_vec(words):
     for word in words:
         if word in WORDLIST:
             vec[WORDLIST[word]] = 1
-
+    return vec
 
 for i, row in enumerate(parsed_data):
     parsed_data[i] = (
         to_vec(parsed_data[i][0]),
         parsed_data[i][1]
     )
-print(WORDLIST)

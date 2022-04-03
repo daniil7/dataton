@@ -36,15 +36,36 @@ from perceptron import Net
 
 # random.shuffle(parsed_data)
 
-for_train = parsed_data[:int(len(parsed_data) * (1/3))]
-for_test = parsed_data[int(len(parsed_data) * (1/3)):]
+# for_train = parsed_data[:int(len(parsed_data) * (1/3))]
+for_test = parsed_data[int(len(parsed_data) * (2/3)):]
+
+for_train = []
+
+i = 0
+for row in parsed_data:
+    if i == 800:
+        break;
+    if row[1] == True:
+        for_train.append(row)
+        i += 1
+
+i = 0
+for row in parsed_data:
+    if i == 800:
+        break;
+    if row[1] == False:
+        for_train.append(row)
+        i += 1
+
+import random
+random.shuffle(for_train)
 
 perceptron = Net(len(parsed_data[0][0]), 40)
 
 print("Переходим к тренировке")
 
 # тренируем
-for i in range(1):
+for i in range(5):
     for row in for_train:
         perceptron.train(row[0], row[1])
     print(i)
