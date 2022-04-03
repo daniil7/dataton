@@ -20,10 +20,11 @@ for text, is_male in get_authors_genders():
 
         for token in tokens:  # filter tokens
             if len(token) != 1:
-                i += 1
                 token = morph.parse(token)[0].normal_form
                 filtered.append(token)
-                WORDLIST[token] = i
+                if token not in WORDLIST:
+                    WORDLIST[token] = i
+                    i += 1
 
         if is_male:
             male_phrases.extend(filtered)
@@ -48,4 +49,4 @@ for i, row in enumerate(parsed_data):
         to_vec(parsed_data[i][0]),
         parsed_data[i][1]
     )
-print(parsed_data)
+print(WORDLIST)
