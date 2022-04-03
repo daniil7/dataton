@@ -4,7 +4,7 @@ import numpy as np
 from razdel import sentenize, tokenize
 from pymorphy2 import MorphAnalyzer
 
-WORDLIST = set()
+WORDLIST = {}
 morph = MorphAnalyzer()
 
 parsed_data = []
@@ -12,10 +12,7 @@ parsed_data = []
 male_phrases = []
 female_phrases = []
 
-def to_vec(words):
-    pass
-
-
+i = 0
 for text, is_male in get_authors_genders():
     for sent in sentenize(text):
         tokens = [_.text for _ in tokenize(sent.text)]
@@ -23,15 +20,32 @@ for text, is_male in get_authors_genders():
 
         for token in tokens:  # filter tokens
             if len(token) != 1:
+                i += 1
                 token = morph.parse(token)[0].normal_form
                 filtered.append(token)
+                WORDLIST[token] = i
 
         if is_male:
             male_phrases.extend(filtered)
         else:
             female_phrases.extend(filtered)
 
-        WORDLIST.update(filtered)
         parsed_data.append(
             (filtered, is_male)
         )
+
+TOTAL_WORDS = len(WORDLIST)
+
+
+def to_vec(words):
+    vec = np.zeros(TOTAL_WORDS)
+    for word in words:
+        vec[WORDLIST[word]] = 1
+
+
+for i, row in enumerate(parsed_data):
+    parsed_data[i] = (
+        to_vec(parsed_data[i][0]),
+        parsed_data[i][1]
+    )
+print(parsed_data)
