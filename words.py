@@ -41,7 +41,8 @@ TOTAL_WORDS = len(WORDLIST)
 def to_vec(words):
     vec = np.zeros(TOTAL_WORDS)
     for word in words:
-        vec[WORDLIST[word]] = 1
+        if word in WORDLIST:
+            vec[WORDLIST[word]] = 1
 
 
 for i, row in enumerate(parsed_data):
